@@ -1,0 +1,18 @@
+tokenizer_version: 4
+
+tokenizer:
+  type: hybrid_byte_level_bpe
+  base_vocab_size: 256
+  word_merges: 1220
+  phrase_merges: 512
+  vocab_size: 1988
+
+files:
+  word_merges: tokenizer/merges_word_v3.txt
+  phrase_merges: tokenizer/merges_phrase_v4.txt
+
+special_tokens:
+  pad: "[PAD]"
+  unk: "[UNK]"
+  context: "[CONTEXT]"
+  prompt: "[PROMPT]"

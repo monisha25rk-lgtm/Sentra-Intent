@@ -1,0 +1,112 @@
+{
+  "title": "SENTRA dataset cleaning report",
+  "retained_columns_in_order": [
+    "example_id",
+    "group_id",
+    "scenario_family",
+    "conversation_context",
+    "prompt",
+    "intent_labels",
+    "action",
+    "target",
+    "data_type",
+    "sensitivity",
+    "destination",
+    "authorization",
+    "context_dependency",
+    "user_role"
+  ],
+  "cleaning_policy": [
+    "Retained the 14 agreed columns only.",
+    "Preserved original field values, labels, list ordering, and data types.",
+    "Did not generate, infer, rewrite, or correct any labels or prompts.",
+    "Kept the official train, test1, and test2 files separate.",
+    "Removed no records from the official train/test splits because no duplicate model-input examples were found within those splits.",
+    "For the older LLM-generated file, removed exact duplicate rows based on all 14 retained columns.",
+    "Rows with empty or invalid intent_labels were excluded from the labeled supplemental file and placed in a separate quarantine file.",
+    "The LLM supplemental file is not merged into the official training split."
+  ],
+  "files": {
+    "sentra_train_clean.jsonl": {
+      "records": 6880,
+      "role": "official training split",
+      "label_counts": {
+        "ACCESS": 658,
+        "ANALYSIS": 662,
+        "CODING": 519,
+        "EXTERNAL_UPLOAD": 1231,
+        "EXTRACTION": 482,
+        "SECURITY_BYPASS": 497,
+        "SHARING": 2008,
+        "SUMMARIZATION": 742,
+        "TRANSFORMATION": 648
+      },
+      "multi_label_records": 531,
+      "exact_duplicate_excess": 0,
+      "same_prompt_context_label_excess": 0
+    },
+    "sentra_test1_clean.jsonl": {
+      "records": 1473,
+      "role": "held-out test split 1",
+      "label_counts": {
+        "ACCESS": 139,
+        "ANALYSIS": 146,
+        "CODING": 110,
+        "EXTERNAL_UPLOAD": 262,
+        "EXTRACTION": 104,
+        "SECURITY_BYPASS": 106,
+        "SHARING": 427,
+        "SUMMARIZATION": 162,
+        "TRANSFORMATION": 139
+      },
+      "multi_label_records": 113,
+      "exact_duplicate_excess": 0,
+      "same_prompt_context_label_excess": 0
+    },
+    "sentra_test2_clean.jsonl": {
+      "records": 1484,
+      "role": "held-out test split 2",
+      "label_counts": {
+        "ACCESS": 137,
+        "ANALYSIS": 141,
+        "CODING": 114,
+        "EXTERNAL_UPLOAD": 271,
+        "EXTRACTION": 102,
+        "SECURITY_BYPASS": 107,
+        "SHARING": 439,
+        "SUMMARIZATION": 159,
+        "TRANSFORMATION": 136
+      },
+      "multi_label_records": 113,
+      "exact_duplicate_excess": 0,
+      "same_prompt_context_label_excess": 0
+    },
+    "sentra_llm_supplement_exact_deduplicated.jsonl": {
+      "records": 1920,
+      "role": "supplemental data; do not merge into official train without review",
+      "original_records": 9132,
+      "valid_labeled_records_before_dedup": 9073,
+      "exact_duplicate_rows_removed": 7153,
+      "same_prompt_context_label_duplicate_excess_remaining": 684,
+      "note": "Some rows share identical prompt, context, and labels but differ in user_role. They were retained to preserve distinct metadata."
+    },
+    "sentra_llm_unlabeled_quarantine.jsonl": {
+      "records": 59,
+      "role": "excluded from supervised training pending human labeling",
+      "reason": "intent_labels is empty or invalid"
+    }
+  },
+  "split_integrity": {
+    "train_vs_test1_same_prompt_context_label_overlap": 0,
+    "train_vs_test2_same_prompt_context_label_overlap": 0,
+    "test1_vs_test2_same_prompt_context_label_overlap": 0,
+    "train_vs_test1_group_id_overlap": 0,
+    "train_vs_test2_group_id_overlap": 0,
+    "test1_vs_test2_group_id_overlap": 0
+  },
+  "important_limitations": [
+    "This cleaning process checks structural validity, missing labels, exact duplicates, and split overlap; it does not prove that the original human/LLM annotations are semantically correct.",
+    "The 59 unlabeled records have not been assigned labels.",
+    "The supplemental LLM data has repeated model inputs across user_role values and should not be blindly appended to the official training split."
+  ]
+}

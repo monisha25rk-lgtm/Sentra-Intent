@@ -1,0 +1,12 @@
+tokenizer_version: 2
+
+source:
+  path: data/intent/tokenizer_corpus.txt
+
+tokenizer:
+  type: byte_level_bpe
+  base_vocab_size: 256
+  merges_path: tokenizer/merges_intent_v1.txt
+
+training:
+  rebuild: false
